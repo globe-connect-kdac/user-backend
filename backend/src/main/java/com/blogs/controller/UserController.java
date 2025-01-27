@@ -18,9 +18,12 @@ package com.blogs.controller;
 	import org.springframework.web.bind.annotation.ResponseBody;
 	import org.springframework.web.bind.annotation.RestController;
 
-	//import com.blogs.dto.ApiResponse;
+import com.blogs.dto.AddUserDto;
+//import com.blogs.dto.ApiResponse;
 	import com.blogs.pojo.*;
 	import com.blogs.services.UserService;
+
+import jakarta.validation.Valid;
 
 	@RestController
 	@RequestMapping("/users")
@@ -35,9 +38,9 @@ package com.blogs.controller;
 		}
 		
 		@PostMapping
-		public ResponseEntity<?> addNewUser(@RequestBody User user) {
-			System.out.println("in add user " + user);// transient category
-			return ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewUser(user));
+		public ResponseEntity<?> addNewUser(@Valid @RequestBody AddUserDto userdto) {
+			System.out.println("in add user " + userdto);// transient category
+			return ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewUser(userdto));
 		}
 		
 
