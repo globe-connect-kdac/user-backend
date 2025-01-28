@@ -22,6 +22,5 @@ public class AddCommunityDto {
     
     private Category category;
 
-    // Added ownerId field for the user ID
     private Long ownerId;
 }
