@@ -87,7 +87,49 @@ public class UserServiceImpl implements UserService {
 	    }
 	}
 
-	/*=================== DELETE USER BY ID ====================*/
+	/*=================== UPDATE USER ====================*/
+	@Override
+	public ApiResponse updateUser(Long userId, UpdateUserDto updateUserDto) {
+	    // Find user by ID
+	    Optional<User> optionalUser = userDao.findById(userId);
+	    
+	    if (optionalUser.isPresent()) {
+	        User user = optionalUser.get();
+	        
+	        // Update fields if not null
+	        if (updateUserDto.getEmail() != null) {
+	            user.setEmail(updateUserDto.getEmail());
+	        }
+	        
+	        if (updateUserDto.getFirstName() != null) {
+	            user.setFirstName(updateUserDto.getFirstName());
+	        }
+	        
+	        if (updateUserDto.getLastName() != null) {
+	            user.setLastName(updateUserDto.getLastName());
+	        }
+	        
+	        if (updateUserDto.getPassword() != null) {
+	            user.setPassword(updateUserDto.getPassword());
+	        }
+	        
+	        if (updateUserDto.getUserName() != null) {
+	            user.setUserName(updateUserDto.getUserName());
+	        }
+	        
+	        if (updateUserDto.getProfileImage() != null) {
+	            user.setProfileImage(updateUserDto.getProfileImage());
+	        }
+	        
+	        // Save updated user
+	        userDao.save(user);
+	        
+	        return new ApiResponse("User updated successfully...!!!" + userId);
+	        
+	    } else {
+	        return new ApiResponse("User not found...!!!" + userId);
+	    }
+	}
 
 	
 	

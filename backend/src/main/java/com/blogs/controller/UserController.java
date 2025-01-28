@@ -19,6 +19,8 @@ package com.blogs.controller;
 	import org.springframework.web.bind.annotation.RestController;
 
 import com.blogs.dto.AddUserDto;
+import com.blogs.dto.ApiResponse;
+import com.blogs.dto.UpdateUserDto;
 //import com.blogs.dto.ApiResponse;
 	import com.blogs.pojo.*;
 	import com.blogs.services.UserService;
@@ -62,7 +64,13 @@ import jakarta.validation.Valid;
 		}
 
 
-		
+		@PutMapping("/updateUser")
+		public ResponseEntity<?> updateUser(@RequestParam("userId") Long userId, @RequestBody UpdateUserDto updateUserDto) {
+			 System.out.println("I am in updateUser  method");
+//			ApiResponse response = userService.updateUser(userId, updateUserDto);
+		    return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userId, updateUserDto));
+		}
+
 
 	}
 
