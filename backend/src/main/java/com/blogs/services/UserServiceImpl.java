@@ -96,7 +96,6 @@ public class UserServiceImpl implements UserService {
 	    if (optionalUser.isPresent()) {
 	        User user = optionalUser.get();
 	        
-	        // Update fields if not null
 	        if (updateUserDto.getEmail() != null) {
 	            user.setEmail(updateUserDto.getEmail());
 	        }
@@ -121,7 +120,6 @@ public class UserServiceImpl implements UserService {
 	            user.setProfileImage(updateUserDto.getProfileImage());
 	        }
 	        
-	        // Save updated user
 	        userDao.save(user);
 	        
 	        return new ApiResponse("User updated successfully...!!!" + userId);

@@ -15,6 +15,8 @@ import com.blogs.dao.UserDao;
 import com.blogs.dto.AddCommunityDto;
 import com.blogs.dto.ApiResponse;
 import com.blogs.dto.CommunityResponseDto;
+import com.blogs.dto.UpdateCommunityDto;
+import com.blogs.enums.Status;
 import com.blogs.pojo.Community;
 import com.blogs.pojo.User;
 
@@ -80,6 +82,65 @@ public class CommunityServiceImpl implements CommunityService{
 		return null;
 	}
 
-    
+/*================ DELETE COMMUNITY (SOFT DELETE) ================= */
+	
+	@Override
+	public ApiResponse deleteCommunity(Long communityId) {
+		
+		Optional<Community> optionalCommunity = communityDao.findById(communityId);
+		
+		if (optionalCommunity.isPresent()) {
+	       
+			Community community = optionalCommunity.get();
+	       
+			community.setStatus(Status.INACTIVE); 
+	     
+	        communityDao.save(community);
+	        
+	        return new ApiResponse("Community deleted successfully...!!!" + communityId);
+	    } else {
+	        return new ApiResponse("User not found...!!!" + communityId);
+	    }
+		
+	}
+
+	
+
+/*================ UPDATE COMMUNITY ================= */
+	
+	@Override
+	public ApiResponse updateCommunity(Long communityId, UpdateCommunityDto updateCommunityDto) {
+		
+		 Optional<Community> optionalCommunity = communityDao.findById(communityId);
+		 
+		 if(optionalCommunity.isPresent())
+		 {
+			 Community community = optionalCommunity.get();
+			 
+			 if(updateCommunityDto.getTitle() != null)
+			 {
+				 community.setTitle(updateCommunityDto.getTitle());
+			 }
+			 if(updateCommunityDto.getDescription() != null)
+			 {
+				 community.setTitle(updateCommunityDto.getTitle());
+			 }
+			 if(updateCommunityDto.getCommunityImage() != null)
+			 {
+				 community.setCommunityImage(updateCommunityDto.getCommunityImage());
+			 }
+			 
+			 communityDao.save(community);
+			
+			 return new ApiResponse("Community updated successfully...!!! ID: " + communityId);
+		 }
+		 else 
+		 {
+			 return new ApiResponse("Community not found with provided ID...!!! ID: " + communityId);
+		 }
+		
+	}
+	
+  
 	
 }

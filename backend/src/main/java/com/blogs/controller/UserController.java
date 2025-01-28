@@ -37,13 +37,13 @@ import jakarta.validation.Valid;
 			System.out.println("in ctor " + getClass());
 		}
 		
-		@PostMapping
+		@PostMapping("add-user")
 		public ResponseEntity<?> addNewUser(@Valid @RequestBody AddUserDto userdto) {
 			System.out.println("in add user " + userdto);// transient category
 			return ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewUser(userdto));
 		}
 		
-		@GetMapping
+		@GetMapping("/get-all")
 		public ResponseEntity<?> getAllUsers() {
 			System.out.println("I am in getAllUsers method");
 			return ResponseEntity.status(HttpStatus.FOUND).body(userService.getAllUsers());
@@ -55,14 +55,14 @@ import jakarta.validation.Valid;
 		    return ResponseEntity.status(HttpStatus.FOUND).body(userService.findUserByUsername(userName));
 		}
 		
-		@PutMapping
+		@PutMapping("/delete-user")
 		public ResponseEntity<?> deleteUserById(@RequestParam("userId") Long userId) {
 		    System.out.println("I am in deleteUserById (soft delete) method");
 		    return ResponseEntity.status(HttpStatus.FOUND).body(userService.deleteUserById(userId));
 		}
 
 
-		@PutMapping("/updateUser")
+		@PutMapping("/update-user")
 		public ResponseEntity<?> updateUser(@RequestParam("userId") Long userId, @RequestBody UpdateUserDto updateUserDto) {
 			 System.out.println("I am in updateUser  method");
 //			ApiResponse response = userService.updateUser(userId, updateUserDto);
