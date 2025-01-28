@@ -12,6 +12,7 @@ import com.blogs.services.PostService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -27,6 +28,13 @@ public class PostController {
 	public ResponseEntity<?> addPost(@Valid @RequestBody AddPostDto postDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(postService.addPost(postDto));
 	}
+	
+	@GetMapping("/get-all")
+	public ResponseEntity<?> getAllPosts() {
+		
+		return ResponseEntity.status(HttpStatus.FOUND).body(postService.getAllPosts());
+	}
+	
 	
 	
 	

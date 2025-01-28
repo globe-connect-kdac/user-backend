@@ -1,5 +1,8 @@
 package com.blogs.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +12,8 @@ import com.blogs.dao.PostDao;
 import com.blogs.dao.UserDao;
 import com.blogs.dto.AddPostDto;
 import com.blogs.dto.ApiResponse;
+import com.blogs.dto.CommunityResponseDto;
+import com.blogs.dto.PostResponseDto;
 import com.blogs.pojo.Community;
 import com.blogs.pojo.Post;
 import com.blogs.pojo.User;
@@ -52,11 +57,22 @@ public class PostServiceImpl implements PostService{
 		return new ApiResponse("Post Added with post Id: "+ p.getId());
 	
 	}
+
+
 	
 /*======================= GET ALL POSTS =================================*/	
 	
-	
-	
-	
+	@Override
+	public List<PostResponseDto> getAllPosts() {
+		
+		 List<Post> postsList = postDao.findAll();
+	     
+	        List<PostResponseDto> postsResponseList = postsList.stream()
+	            .map(post -> mapper.map(post, PostResponseDto.class))
+	            .collect(Collectors.toList());
+	        
+	        return postsResponseList;
+	}
+
 	
 }
