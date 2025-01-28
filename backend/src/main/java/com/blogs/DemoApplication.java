@@ -26,7 +26,6 @@ public class DemoApplication {
 																				// between src n dest
 				.setPropertyCondition(Conditions.isNotNull());// DO NOT transfer nulls from src ->dest
 		
-		
 
 	    // Custom mapping for Post to PostResponseDto
 		mapper.addMappings(new PropertyMap<Post, PostResponseDto>() {

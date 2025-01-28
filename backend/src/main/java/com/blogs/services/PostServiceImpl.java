@@ -1,6 +1,7 @@
 package com.blogs.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -14,6 +15,8 @@ import com.blogs.dto.AddPostDto;
 import com.blogs.dto.ApiResponse;
 import com.blogs.dto.CommunityResponseDto;
 import com.blogs.dto.PostResponseDto;
+import com.blogs.dto.UpdatePostDto;
+import com.blogs.enums.Status;
 import com.blogs.pojo.Community;
 import com.blogs.pojo.Post;
 import com.blogs.pojo.User;
@@ -60,7 +63,7 @@ public class PostServiceImpl implements PostService{
 
 
 	
-/*======================= GET ALL POSTS =================================*/	
+
 	
 	@Override
 	public List<PostResponseDto> getAllPosts() {
@@ -74,5 +77,58 @@ public class PostServiceImpl implements PostService{
 	        return postsResponseList;
 	}
 
+/*======================= DELETE POST (SOFT DELETE) =================================*/	
+	
+	@Override
+	public ApiResponse deletePost(Long postId) {
+		
+	    Optional<Post> optionalPost = postDao.findById(postId);
+	    
+	    if (optionalPost.isPresent()) {
+	        Post post = optionalPost.get();
+	        post.setStatus(Status.INACTIVE); 
+	     
+	        postDao.save(post);
+	        
+	        return new ApiResponse("Post deleted successfully...!!! ID: " + postId);
+	    } else {
+	        return new ApiResponse("Post not found...!!! ID: " + postId);
+	    }
+	}
+
+
+	
+/*======================= UPDATE POST =================================*/	
+	
+	@Override
+	public ApiResponse updatePost(Long postId, UpdatePostDto updatePostDto) {
+		
+		Optional<Post> optionlPost = postDao.findById(postId);
+		
+		if(optionlPost.isPresent())
+		{
+			Post post = optionlPost.get();
+			
+			if(updatePostDto.getTitle() != null)
+			{
+				post.setTitle(updatePostDto.getTitle());
+			}
+			if(updatePostDto.getDescription() != null)
+			{
+				post.setCaptions(updatePostDto.getDescription());
+			}
+			
+			postDao.save(post);
+			
+			return new ApiResponse("Post updated successfully...!!! ID: " + postId);
+		}
+		else
+		{
+			return new ApiResponse("Post not found with ID: " + postId);
+		}
+		
+	}
+	
+	
 	
 }
