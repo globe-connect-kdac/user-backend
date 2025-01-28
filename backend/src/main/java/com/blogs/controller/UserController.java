@@ -43,7 +43,24 @@ import jakarta.validation.Valid;
 			return ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewUser(userdto));
 		}
 		
+		@GetMapping
+		public ResponseEntity<?> getAllUsers() {
+			System.out.println("I am in getAllUsers method");
+			return ResponseEntity.status(HttpStatus.FOUND).body(userService.getAllUsers());
+		}
 		
+		@GetMapping("/searchUserByUsername")
+		public ResponseEntity<?> searchUserByUsername(@RequestParam("userName") String userName) {
+		    System.out.println("I am in searchUserByUsername method");
+		    return ResponseEntity.status(HttpStatus.FOUND).body(userService.findUserByUsername(userName));
+		}
+		
+		@PutMapping
+		public ResponseEntity<?> deleteUserById(@RequestParam("userId") Long userId) {
+		    System.out.println("I am in deleteUserById (soft delete) method");
+		    return ResponseEntity.status(HttpStatus.FOUND).body(userService.deleteUserById(userId));
+		}
+
 
 		
 
