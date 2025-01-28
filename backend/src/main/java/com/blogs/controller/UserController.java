@@ -49,7 +49,7 @@ import jakarta.validation.Valid;
 			return ResponseEntity.status(HttpStatus.FOUND).body(userService.getAllUsers());
 		}
 		
-		@GetMapping("/searchUserByUsername")
+		@GetMapping("/search-user")
 		public ResponseEntity<?> searchUserByUsername(@RequestParam("userName") String userName) {
 		    System.out.println("I am in searchUserByUsername method");
 		    return ResponseEntity.status(HttpStatus.FOUND).body(userService.findUserByUsername(userName));
