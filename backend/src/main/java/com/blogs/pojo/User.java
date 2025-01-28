@@ -46,7 +46,7 @@ public class User extends Base {
     @Column(name = "dob") // Added column name for dob
     private LocalDate dob;
 
-    @Column(name = "password") // Changed column name to "password"
+    @Column(name = "password", length = 8) // Changed column name to "password"
     private String password;
 
     @Column(name = "bio") // Added column for bio

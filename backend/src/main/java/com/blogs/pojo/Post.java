@@ -32,7 +32,7 @@ public class Post extends Base {
     // Status (ACTIVE, INACTIVE, etc.)
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private Status status = Status.ACTIVE;
 
     @Column(name = "comments_count", nullable = false)
     private int commentsCount;
