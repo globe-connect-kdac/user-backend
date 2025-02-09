@@ -14,6 +14,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import com.blogs.enums.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,55 +27,54 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"communityList", "postList"}) // Exclude to prevent recursion
 public class User extends Base {
 
     @Column(name = "first_name", length = 30)
     private String firstName;
 
-    @Column(name = "last_name", length = 30) // Changed column name to "last_name"
+    @Column(name = "last_name", length = 30)
     private String lastName;
 
-    @Column(name = "user_name",unique=true, length = 30) // Changed column name to "user_name"
+    @Column(name = "user_name", unique = true, length = 30)
     private String userName;
 
-    @Column(name = "email",unique=true, length = 100) // Changed column name and increased length
+    @Column(name = "email", unique = true, length = 100)
     private String email;
 
-    @Column(name = "mobile", length = 12) // Changed column name and increased length
+    @Column(name = "mobile", length = 12)
     private String mobile;
 
-    @Column(name = "dob") // Added column name for dob
+    @Column(name = "dob")
     private LocalDate dob;
 
-    @Column(name = "password") // Changed column name to "password"
+    @Column(name = "password", length = 8)
     private String password;
 
-    @Column(name = "bio") // Added column for bio
+    @Column(name = "bio")
     private String bio;
 
-    @Column(name = "profile_image") // Add column for profile image, type BLOB or similar in DB
-    private byte[] profileImage; // If you're using BLOB for image storage
+    @Column(name = "profile_image")
+    private byte[] profileImage;
 
     @Enumerated(EnumType.STRING)
-    // Enum types for gender and status
     @Column(name = "gender")
-    private Gender gender; // Assuming you define Gender enum
+    private Gender gender;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status; // Assuming you define Status enum (active, inactive)
+    private Status status;
 
-    // ManyToMany relationship with Community
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "user_communities", 
         joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "community_id")
     )
+    @JsonIgnore  // Prevents recursive JSON serialization
     private List<Community> communityList = new ArrayList<>();
 
-    // OneToMany relationship with Post
-    @OneToMany(mappedBy = "postUser", fetch = FetchType.LAZY) // Assuming Post has a 'postUser' field
+    @OneToMany(mappedBy = "postUser", fetch = FetchType.LAZY)
+    @JsonIgnore  // Prevents recursive JSON serialization
     private List<Post> postList = new ArrayList<>();
 }
