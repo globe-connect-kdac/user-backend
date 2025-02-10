@@ -2,12 +2,7 @@ package com.blogs.dto;
 
 import com.blogs.enums.Status;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import java.util.List;
+import lombok.*;
 
 @Getter
 @Setter
@@ -15,10 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class AddPostDto {
-
-    Long userId;
-
-    Long communityId;
+    private Long userId;
+    private Long communityId;
 
     @NotEmpty(message = "Title cannot be empty")
     private String title;
@@ -27,7 +20,4 @@ public class AddPostDto {
     private String captions;
 
     private Status status = Status.ACTIVE;
-
-    // New fields for handling media
-    private List<String> mediaUrls;  // Stores media URLs (or file names if local storage)
 }

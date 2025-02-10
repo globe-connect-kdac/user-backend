@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blogs.dao.CommunityDao;
 import com.blogs.dao.PostDao;
@@ -42,23 +43,32 @@ public class PostServiceImpl implements PostService{
 /*======================= ADD POST =================================*/	
 	
 	@Override
-	public ApiResponse addPost(AddPostDto postDto) {
-		
-		 Community cmnty = communityDao.findById(postDto.getCommunityId())
-	                .orElseThrow(() -> new RuntimeException("Community not found"));
-		 
-		 User user = userDao.findById(postDto.getUserId())
-	                .orElseThrow(() -> new RuntimeException("User not found"));
-		
-		Post post = mapper.map(postDto, Post.class);
-		
-		post.setCommunity(cmnty);
-		post.setPostUser(user);
-		
-		Post p = postDao.save(post);
-		
-		return new ApiResponse("Post Added with post Id: "+ p.getId());
-	
+	public ApiResponse addPost(Long userId, Long communityId, String title, String captions, MultipartFile image) {
+	    Community community = communityDao.findById(communityId)
+	            .orElseThrow(() -> new RuntimeException("Community not found"));
+
+	    User user = userDao.findById(userId)
+	            .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    Post post = new Post();
+	    post.setTitle(title);
+	    post.setCaptions(captions);
+	    post.setCommunity(community);
+	    post.setPostUser(user);
+	    
+	    // Save Image URL if provided
+	    if (image != null) {
+	        String imageUrl = saveImage(image); // You need to implement this method to store and return the URL
+	        post.setMediaUrl(imageUrl);
+	    }
+
+	    postDao.save(post);
+	    return new ApiResponse("Post Added with post Id: " + post.getId());
+	}
+
+	// Dummy saveImage method, replace with actual logic
+	private String saveImage(MultipartFile image) {
+	    return "http://your-server.com/images/" + image.getOriginalFilename();
 	}
 
 

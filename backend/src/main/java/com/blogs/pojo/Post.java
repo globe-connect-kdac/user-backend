@@ -29,6 +29,8 @@ public class Post extends Base {
     @Column(name = "captions", length = 500)
     private String captions;
 
+    private String mediaUrl;
+    
     // Status (ACTIVE, INACTIVE, etc.)
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
