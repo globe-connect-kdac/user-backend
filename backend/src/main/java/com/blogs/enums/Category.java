@@ -9,13 +9,19 @@ public enum Category {
 
     private final String displayName;
 
-    // Constructor to set the display name
     Category(String displayName) {
         this.displayName = displayName;
     }
 
-    // Getter to access the display name
     public String getDisplayName() {
         return displayName;
+    }
+
+    public static Category fromString(String category) {
+        try {
+            return Category.valueOf(category);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid category value: " + category);
+        }
     }
 }

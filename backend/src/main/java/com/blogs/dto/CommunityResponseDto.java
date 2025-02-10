@@ -11,10 +11,14 @@ import lombok.*;
 @ToString
 public class CommunityResponseDto {
 
+    private Long id;  // Added community ID
     private String title;
     private String description;
     private Status status;
     private Category category;
+    private int postCount;  
+    private int membersCount;  
     private Long ownerId;
+    private String profileImage; // Will store Base64-encoded string
 
 }

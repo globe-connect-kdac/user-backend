@@ -34,7 +34,7 @@ public class Community extends Base {
 
     // Profile image (BLOB)
     @Lob
-    @Column(name = "community_image")
+    @Column(name = "community_image", columnDefinition = "LONGBLOB")
     private byte[] communityImage;  // BLOB or binary type for images
 
     // Category (Assuming it's an enum type)
