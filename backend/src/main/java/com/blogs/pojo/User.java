@@ -10,6 +10,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -39,7 +40,8 @@ public class User extends Base {
     @Column(name = "user_name", unique = true, length = 30)
     private String userName;
 
-    @Column(name = "email", unique = true, length = 100)
+//    @Column(name = "email", unique = true, length = 100)
+    @Column(name = "email", length = 100)
     private String email;
 
     @Column(name = "mobile", length = 12)
@@ -54,8 +56,9 @@ public class User extends Base {
     @Column(name = "bio")
     private String bio;
 
-    @Column(name = "profile_image")
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] profileImage;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")

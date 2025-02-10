@@ -3,6 +3,7 @@ import com.blogs.dto.*;
 import com.blogs.enums.Status;
 import com.blogs.pojo.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blogs.dao.UserDao;
 import com.blogs.pojo.User;
@@ -28,12 +30,22 @@ public class UserServiceImpl implements UserService {
 /*=================== ADD USER ====================*/
 	
 	@Override
-	public ApiResponse addNewUser(AddUserDto userdto) {
-		User user=mapper.map(userdto, User.class);
-		System.out.println(user);
-		User u=userDao.save(user);
-		return new ApiResponse("User is Added with user Id"+u.getId());
+	public ApiResponse addNewUser(AddUserDto userDto, MultipartFile profileImage) {
+	    User user = mapper.map(userDto, User.class);
+
+	    // Save image as byte array
+	    if (profileImage != null && !profileImage.isEmpty()) {
+	        try {
+	            user.setProfileImage(profileImage.getBytes());
+	        } catch (IOException e) {
+	            return new ApiResponse("Error processing image: " + e.getMessage());
+	        }
+	    }
+
+	    User savedUser = userDao.save(user);
+	    return new ApiResponse("User added successfully with ID: " + savedUser.getId());
 	}
+
 
 /*=================== GET ALL USERS ====================*/
 	
@@ -89,9 +101,11 @@ public class UserServiceImpl implements UserService {
 
 	/*=================== UPDATE USER ====================*/
 	@Override
-	public ApiResponse updateUser(Long userId, UpdateUserDto updateUserDto) {
+	public ApiResponse updateUser(Long userId, UpdateUserDto updateUserDto, MultipartFile profileImage) {
 	    // Find user by ID
 	    Optional<User> optionalUser = userDao.findById(userId);
+	    
+	    System.out.println(updateUserDto.toString());
 	    
 	    if (optionalUser.isPresent()) {
 	        User user = optionalUser.get();
@@ -116,10 +130,14 @@ public class UserServiceImpl implements UserService {
 	            user.setUserName(updateUserDto.getUserName());
 	        }
 	        
-	        if (updateUserDto.getProfileImage() != null) {
-	            user.setProfileImage(updateUserDto.getProfileImage());
+	        if (profileImage != null && !profileImage.isEmpty()) {
+	            try {
+	                user.setProfileImage(profileImage.getBytes());  // Handle profile image update
+	            } catch (IOException e) {
+	                return new ApiResponse("Error processing image: " + e.getMessage());
+	            }
 	        }
-	        
+	        	
 	        userDao.save(user);
 	        
 	        return new ApiResponse("User updated successfully...!!!" + userId);
@@ -133,23 +151,33 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ApiResponse loginUser(LoginDto loginDto) {
 	    List<User> usersList = userDao.findAll();
-	    
+
 	    System.out.println("Attempting to log in with: " + loginDto.getEmail() + " | " + loginDto.getPassword());
-	    
+
 	    for (User user : usersList) {
 	        System.out.println("Checking user: " + user.getEmail() + " | " + user.getPassword());
 
 	        if (user.getEmail().trim().equalsIgnoreCase(loginDto.getEmail().trim()) &&
 	            user.getPassword().trim().equals(loginDto.getPassword().trim())) {
-	            
-	            return new ApiResponse("Login Successful", user.getId(), user.getUserName());
+
+	            return new ApiResponse(
+	                "Login Successful",
+	                user.getId(),
+	                user.getFirstName(),
+	                user.getLastName(),
+	                user.getUserName(),
+	                user.getEmail(),
+	                user.getProfileImage(),  // Profile image URL (or Base64 if needed)
+	                user.getBio(),
+	                user.getDob(),
+	                user.getCreatedOn()
+	            );
 	        }
 	    }
-	    
+
 	    return new ApiResponse("Invalid Credentials");
 	}
 
-	
 	
 
 }
